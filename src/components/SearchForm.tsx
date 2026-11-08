@@ -18,6 +18,7 @@ type SearchFormProps = {
 export function SearchForm({ onSubmit }: SearchFormProps) {
   const [value, setValue] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleChange: NonNullable<TextInputProps['onChangeText']> = (nextValue) => {
     setValue(nextValue);
@@ -47,17 +48,22 @@ export function SearchForm({ onSubmit }: SearchFormProps) {
   return (
     <View style={styles.form}>
       <View style={styles.fieldGroup}>
-        <Text style={styles.label}>42 login</Text>
+        <Text style={styles.label}>Intra login</Text>
         <TextInput
+          accessibilityHint="Enter a student login from 42 Intra"
           accessibilityLabel="42 login"
           autoCapitalize="none"
+          autoComplete="off"
           autoCorrect={false}
+          onBlur={() => setIsFocused(false)}
           onChangeText={handleChange}
+          onFocus={() => setIsFocused(true)}
           onSubmitEditing={handleSubmit}
-          placeholder="Enter a 42 login"
+          placeholder="student-login"
           placeholderTextColor={colors.textMuted}
           returnKeyType="search"
-          style={[styles.input, error && styles.inputError]}
+          style={[styles.input, isFocused && styles.inputFocused, error && styles.inputError]}
+          underlineColorAndroid="transparent"
           value={value}
         />
         {error ? (
@@ -65,7 +71,7 @@ export function SearchForm({ onSubmit }: SearchFormProps) {
             {error}
           </Text>
         ) : (
-          <Text style={styles.hint}>Letters, numbers, hyphens, and underscores.</Text>
+          <Text style={styles.hint}>Use the login shown on the student&apos;s Intra profile.</Text>
         )}
       </View>
 
@@ -73,7 +79,10 @@ export function SearchForm({ onSubmit }: SearchFormProps) {
         accessibilityRole="button"
         onPress={handleSubmit}
         style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
-        <Text style={styles.buttonText}>Search</Text>
+        <Text style={styles.buttonText}>View student profile</Text>
+        <Text aria-hidden style={styles.buttonArrow}>
+          →
+        </Text>
       </Pressable>
     </View>
   );
@@ -88,22 +97,29 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.text,
-    fontSize: typography.body,
-    fontWeight: '700',
+    fontSize: typography.caption,
+    fontWeight: '800',
   },
   input: {
     minHeight: 52,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radii.md,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
     color: colors.text,
     fontSize: typography.body,
+    outlineColor: 'transparent',
+    outlineWidth: 0,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: 14,
+  },
+  inputFocused: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primaryFaint,
   },
   inputError: {
     borderColor: colors.danger,
+    backgroundColor: colors.dangerSoft,
   },
   error: {
     color: colors.danger,
@@ -115,8 +131,10 @@ const styles = StyleSheet.create({
   },
   button: {
     minHeight: 52,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing.sm,
     borderRadius: radii.md,
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.lg,
@@ -127,6 +145,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.white,
     fontSize: typography.body,
+    fontWeight: '700',
+  },
+  buttonArrow: {
+    color: colors.white,
+    fontSize: 20,
     fontWeight: '700',
   },
 });

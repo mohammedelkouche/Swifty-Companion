@@ -6,6 +6,8 @@ export const colors = {
   textMuted: '#64748B',
   primary: '#2563EB',
   primaryPressed: '#1D4ED8',
+  primarySoft: '#DBEAFE',
+  primaryFaint: '#EFF6FF',
   border: '#DCE3EC',
   success: '#15803D',
   successSoft: '#DCFCE7',

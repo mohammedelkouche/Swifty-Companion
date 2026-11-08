@@ -32,13 +32,16 @@ export function ProjectItem({ project }: ProjectItemProps) {
 
 const styles = StyleSheet.create({
   item: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingTop: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    backgroundColor: colors.background,
+    padding: spacing.md,
   },
   summary: {
     flex: 1,
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   badge: {
+    flexShrink: 0,
     borderRadius: radii.pill,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,

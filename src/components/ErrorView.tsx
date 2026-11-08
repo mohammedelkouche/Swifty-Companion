@@ -9,30 +9,43 @@ type ErrorViewProps = {
 };
 
 export function ErrorView({ message, onBack, onRetry }: ErrorViewProps) {
+  const isNotFound = message === 'Login not found.';
+
   return (
     <View style={styles.container}>
-      <View style={styles.icon}>
-        <Text style={styles.iconText}>!</Text>
-      </View>
-      <Text style={styles.title}>Unable to load profile</Text>
-      <Text accessibilityLiveRegion="polite" style={styles.message}>
-        {message}
-      </Text>
-      <View style={styles.actions}>
-        {onRetry ? (
+      <View style={styles.card}>
+        <View style={styles.icon}>
+          <Text style={styles.iconText}>{isNotFound ? '?' : '!'}</Text>
+        </View>
+
+        <View style={styles.copy}>
+          <Text style={styles.title}>{isNotFound ? 'Student not found' : 'Unable to load profile'}</Text>
+          <Text accessibilityLiveRegion="polite" style={styles.message}>
+            {message}
+          </Text>
+          <Text style={styles.guidance}>
+            {isNotFound
+              ? 'Check the spelling of the Intra login, then try another search.'
+              : 'Return to search or try the request again.'}
+          </Text>
+        </View>
+
+        <View style={styles.actions}>
+          {onRetry ? (
+            <Pressable
+              accessibilityRole="button"
+              onPress={onRetry}
+              style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
+              <Text style={styles.primaryButtonText}>Try again</Text>
+            </Pressable>
+          ) : null}
           <Pressable
             accessibilityRole="button"
-            onPress={onRetry}
-            style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
-            <Text style={styles.primaryButtonText}>Retry</Text>
+            onPress={onBack}
+            style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
+            <Text style={styles.secondaryButtonText}>← Back to search</Text>
           </Pressable>
-        ) : null}
-        <Pressable
-          accessibilityRole="button"
-          onPress={onBack}
-          style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
-          <Text style={styles.secondaryButtonText}>Back to search</Text>
-        </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -43,8 +56,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.md,
     padding: spacing.lg,
+  },
+  card: {
+    width: '100%',
+    maxWidth: 520,
+    alignItems: 'center',
+    gap: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.lg,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xl,
   },
   icon: {
     width: 56,
@@ -59,6 +83,10 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '900',
   },
+  copy: {
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
   title: {
     color: colors.text,
     fontSize: typography.sectionTitle,
@@ -66,18 +94,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   message: {
-    maxWidth: 520,
-    color: colors.textMuted,
+    color: colors.text,
     fontSize: typography.body,
+    fontWeight: '700',
     lineHeight: 24,
     textAlign: 'center',
   },
+  guidance: {
+    maxWidth: 380,
+    color: colors.textMuted,
+    fontSize: typography.caption,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
   actions: {
-    alignSelf: 'stretch',
+    width: '100%',
+    alignItems: 'center',
     gap: spacing.sm,
     marginTop: spacing.sm,
   },
   primaryButton: {
+    width: '100%',
+    maxWidth: 280,
     minHeight: 48,
     alignItems: 'center',
     justifyContent: 'center',
@@ -90,6 +128,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   secondaryButton: {
+    width: '100%',
+    maxWidth: 280,
     minHeight: 48,
     alignItems: 'center',
     justifyContent: 'center',

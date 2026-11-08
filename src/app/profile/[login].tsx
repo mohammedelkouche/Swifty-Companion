@@ -83,8 +83,12 @@ export default function ProfileScreen() {
           />
 
           <View style={[styles.collections, isWide && styles.collectionsWide]}>
-            <SkillList skills={profile.data.skills} />
-            <ProjectList projects={profile.data.projects} />
+            <View style={[styles.collectionColumn, isWide && styles.collectionColumnWide]}>
+              <SkillList skills={profile.data.skills} />
+            </View>
+            <View style={[styles.collectionColumn, isWide && styles.collectionColumnWide]}>
+              <ProjectList projects={profile.data.projects} />
+            </View>
           </View>
         </ScrollView>
       ) : null}
@@ -123,6 +127,16 @@ const styles = StyleSheet.create({
   collectionsWide: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+  },
+  collectionColumn: {
+    width: '100%',
+  },
+  collectionColumnWide: {
+    width: 'auto',
+    minWidth: 0,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
   },
   pressed: {
     opacity: 0.76,

@@ -12,7 +12,15 @@ type ProjectListProps = {
 export function ProjectList({ projects }: ProjectListProps) {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Completed projects</Text>
+      <View style={styles.heading}>
+        <View style={styles.headingCopy}>
+          <Text style={styles.title}>Completed projects</Text>
+          <Text style={styles.subtitle}>Validated and failed attempts</Text>
+        </View>
+        <View style={styles.countBadge}>
+          <Text style={styles.countText}>{projects.length}</Text>
+        </View>
+      </View>
       {projects.length > 0 ? (
         <View style={styles.list}>
           {projects.map((project) => (
@@ -28,7 +36,8 @@ export function ProjectList({ projects }: ProjectListProps) {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
+    width: '100%',
+    alignSelf: 'stretch',
     gap: spacing.md,
     borderWidth: 1,
     borderColor: colors.border,
@@ -36,13 +45,42 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.lg,
   },
+  heading: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+  },
+  headingCopy: {
+    flex: 1,
+    gap: spacing.xs,
+  },
   title: {
     color: colors.text,
     fontSize: typography.sectionTitle,
     fontWeight: '800',
   },
+  subtitle: {
+    color: colors.textMuted,
+    fontSize: typography.caption,
+  },
+  countBadge: {
+    minWidth: 34,
+    minHeight: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radii.pill,
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: spacing.sm,
+  },
+  countText: {
+    color: colors.primary,
+    fontSize: typography.caption,
+    fontWeight: '900',
+  },
   list: {
-    gap: spacing.md,
+    width: '100%',
+    gap: spacing.sm,
   },
   empty: {
     color: colors.textMuted,

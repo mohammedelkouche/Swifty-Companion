@@ -32,10 +32,13 @@ export function SkillItem({ skill }: SkillItemProps) {
 
 const styles = StyleSheet.create({
   item: {
+    width: '100%',
     gap: spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingTop: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    backgroundColor: colors.background,
+    padding: spacing.md,
   },
   labels: {
     flexDirection: 'row',
