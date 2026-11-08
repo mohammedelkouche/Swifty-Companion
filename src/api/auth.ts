@@ -1,3 +1,4 @@
+import { getApiConfig } from '@/api/config';
 import { AppError, toAppError } from '@/api/errors';
 
 type Token = {
@@ -16,18 +17,6 @@ const REQUEST_TIMEOUT_MS = 10_000;
 let token: Token | null = null;
 let inflight: Promise<string> | null = null;
 
-function getAuthConfig() {
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL?.trim().replace(/\/$/, '');
-  const clientId = process.env.EXPO_PUBLIC_CLIENT_ID?.trim();
-  const clientSecret = process.env.EXPO_PUBLIC_CLIENT_SECRET?.trim();
-
-  if (!apiUrl || !clientId || !clientSecret) {
-    throw new AppError('CONFIG_MISSING');
-  }
-
-  return { apiUrl, clientId, clientSecret };
-}
-
 function errorFromTokenStatus(status: number) {
   if (status === 400 || status === 401 || status === 403) {
     return new AppError('UNAUTHORIZED');
@@ -45,7 +34,7 @@ function errorFromTokenStatus(status: number) {
 }
 
 async function requestToken(): Promise<string> {
-  const { apiUrl, clientId, clientSecret } = getAuthConfig();
+  const { apiUrl, clientId, clientSecret } = getApiConfig();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
@@ -125,19 +114,3 @@ export async function getAccessToken(
 export function invalidateToken() {
   token = null;
 }
-
-export const expireTokenNow = __DEV__
-  ? () => {
-      if (token) {
-        token.expiresAt = Date.now() - 1;
-      }
-    }
-  : undefined;
-
-export const corruptToken = __DEV__
-  ? () => {
-      if (token) {
-        token.value = 'invalid';
-      }
-    }
-  : undefined;

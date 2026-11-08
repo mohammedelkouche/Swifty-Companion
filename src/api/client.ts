@@ -1,17 +1,8 @@
 import { getAccessToken, invalidateToken } from '@/api/auth';
+import { getApiConfig } from '@/api/config';
 import { AppError, toAppError } from '@/api/errors';
 
 const REQUEST_TIMEOUT_MS = 10_000;
-
-function getApiUrl() {
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL?.trim().replace(/\/$/, '');
-
-  if (!apiUrl) {
-    throw new AppError('CONFIG_MISSING');
-  }
-
-  return apiUrl;
-}
 
 function errorFromApiStatus(status: number) {
   if (status === 404) {
@@ -34,11 +25,12 @@ function errorFromApiStatus(status: number) {
 }
 
 async function request(path: string, accessToken: string) {
+  const { apiUrl } = getApiConfig();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
-    return await fetch(`${getApiUrl()}${path}`, {
+    return await fetch(`${apiUrl}${path}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${accessToken}`,
